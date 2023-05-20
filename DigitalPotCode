@@ -1,0 +1,33 @@
+#include <SPI.h>
+
+const int CS_PIN = 1;
+// const int LeftPinREC = 14;
+// const int RightPinREC = 15;
+//const int SDO_PIN = 11;
+//const int sck_PIN = 13;
+int Res = 126;
+void setup() {
+  SPI.begin();
+  SPI.beginTransaction(SPISettings(200, MSBFIRST, SPI_MODE0));
+  digitalWrite(CS_PIN, HIGH);
+  pinMode(CS_PIN, OUTPUT);
+  // pinMode(LeftPinREC,INPUT);
+  // pinMode(RightPinREC, INPUT);
+
+  digitalWrite(CS_PIN, LOW); // select the MCP4151
+  SPI.transfer(0); // send the "set wiper position" command
+  SPI.transfer(1); // send the resistance value (0-255)
+  digitalWrite(CS_PIN, HIGH); // deselect the MCP4151
+}
+void setResistance(int value) {
+  digitalWrite(CS_PIN, LOW); // select the MCP4151
+  SPI.transfer(0); // send the "set wiper position" command
+  SPI.transfer(value); // send the resistance value (0-255)
+  digitalWrite(CS_PIN, HIGH); // deselect the MCP4151
+  
+}
+int val;//Analogue read input from Rectifiers
+void loop() {
+  delay(2000); // wait for 2 second
+  setResistance(100);
+}
